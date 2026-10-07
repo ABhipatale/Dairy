@@ -1,0 +1,97 @@
+@import 'tailwindcss';
+
+/* ── Design tokens ─────────────────────────────────────────────── */
+@theme {
+  --font-sans: 'Inter', 'Noto Sans Devanagari', ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: #eef6ff;
+  --color-brand-100: #d9ebfd;
+  --color-brand-200: #b4d6fb;
+  --color-brand-300: #82baf6;
+  --color-brand-400: #4895ec;
+  --color-brand-500: #1f7ae0;
+  --color-brand-600: #0b6bcb;
+  --color-brand-700: #0a56a4;
+  --color-brand-800: #0d4884;
+  --color-brand-900: #113d6d;
+
+  --color-surface: #ffffff;
+  --color-canvas: #f6f8fb;
+  --color-line: #e5e9f0;
+
+  --radius-card: 0.875rem;
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.04), 0 1px 3px rgb(16 24 40 / 0.06);
+  --shadow-pop: 0 10px 30px -8px rgb(16 24 40 / 0.18);
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-canvas text-slate-900 antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  /* Devanagari needs a little more line height to avoid clipped matras. */
+  :lang(mr) body,
+  :lang(hi) body {
+    line-height: 1.6;
+  }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-(--radius-card) border border-line bg-surface shadow-(--shadow-card);
+  }
+  /* Grid children may shrink below their content (wide tables scroll inside their card). */
+  .grid > * {
+    min-width: 0;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #eef1f5;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.6), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
